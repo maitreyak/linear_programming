@@ -62,18 +62,21 @@ def objectiveValue(message,valueList,solution):
          if xi > 1e-6:
             obj_value += xi*valueList[i]              
 
-    print "Objective value for %s is: %r" %(message,obj_value)
+    print "Objective value for %s is: %r\n" %(message,obj_value)
 
 
-#plain jane diet problem
-def simpleDietProblem():
+#Plain jane diet problem
+def simpleDietProblem(message):
     Id = spmatrix(1.0,range(foodCount),range(foodCount),(foodCount,foodCount))
     constraintLhs = matrix([nutrientFactMatrix,-nutrientFactMatrix,-Id])
     constraintRhs = matrix([maxMatrix,-minMatrix,matrix(0.0,(foodCount,1))])
     sol = solvers.lp(costMatrix, constraintLhs, constraintRhs)
-    objectiveValue("Simple Diet Problem",cost,sol['x'])
+    objectiveValue(message,cost,sol['x'])
 
-def sixtyPercentDietProblem():
+#The diet problem with an addtional constraints 
+#No single food should account for more than 60% of the total cost In other words, the cost of rice alone 
+#should be less than or equal to 60% of the totl cost. 
+def sixtyPercentDietProblem(message):
     #Build the 60% constreint matrix
     sixtyPercentCost= []
     for index1 in range(0,len(cost)):
@@ -90,12 +93,44 @@ def sixtyPercentDietProblem():
     constraintLhs = matrix([nutrientFactMatrix,-nutrientFactMatrix,-Id,sixtyPercentCostMatrix])
     constraintRhs = matrix([maxMatrix,-minMatrix,matrix(0.0,(foodCount,1)),matrix(0.0,(foodCount,1))])
     sol = solvers.lp(costMatrix, constraintLhs, constraintRhs)
-    objectiveValue("Sixty Percent Diet Problem",cost,sol['x'])
+    objectiveValue(message,cost,sol['x'])
 
 
+#we consider a new problem of eating a protein rich diet for an olympic athlete. 
+#Bob the builder wants to train for the weightlifting team and therefore needs 
+#to eat the maximum amount of protein possible. However, he cannot afford to 
+#spend more than 2 dollars in total food cost
+
+def proteinDietProblem(message):
+    #Build a food cost matrix, as its needed in the constreint 
+    foodCost = []
+    for item in cost:
+        foodCost.append([item])
+    foodCostMatrix = matrix(foodCost,tc='d')
+    
+    protein = []
+    for item in nutrientFact:
+        protein.append(item[1])        
+    proteinMatrix = matrix(protein,tc='d')
+    
+    Id = spmatrix(1.0,range(foodCount),range(foodCount),(foodCount,foodCount))
+    constraintLhs = matrix([nutrientFactMatrix,-nutrientFactMatrix,-Id,foodCostMatrix])
+    constraintRhs = matrix([maxMatrix,-minMatrix,matrix(0.0,(foodCount,1)),matrix([2],tc='d')])
+    
+    #Maximize problem, this is!
+    sol = solvers.lp(-proteinMatrix, constraintLhs, constraintRhs)
+    objectiveValue(message,protein,sol['x'])
 
 if __name__ == "__main__":
-    simpleDietProblem()
-    sixtyPercentDietProblem()
-
+    message = "Simple Diet Problem"
+    print message+" Linear Program" 
+    simpleDietProblem(message)
+    
+    message = "Sixty Percent Diet Problem"
+    print message+" Linear Program" 
+    sixtyPercentDietProblem(message)
+    
+    message = "Protein Diet Problem"
+    print message+" Linear Program" 
+    proteinDietProblem(message)
 
