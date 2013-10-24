@@ -1,6 +1,6 @@
 import unittest
 
-class EquationTestClass(unittest.TestCase):
+class EquationTestCase(unittest.TestCase):
 
     def setUp(self):
         self.equation = Equation(1,4.6,{2:-5.7,3:5.7}) 
@@ -36,7 +36,18 @@ class EquationTestClass(unittest.TestCase):
         self.assertEquals(equation.rhsDict[3],1.0)
         self.assertFalse(equation.exitVarRebalance(2))
 
+    def test_substituteEquationNone(self):
+        self.assertFalse(self.equation.substituteEquation(None))
+    
+    def test_substituteEquationZeroCoeff(self):
+        equation1 = Equation(1,4.0,{2:-2.0,3:2.0})
+        equation2 = Equation(4,4.0,{1:0.0,3:2.0})
+        self.assertTrue(equation2.substituteEquation(equation1)) 
 
+    def test_substituteEquation(self):
+        equation1 = Equation(1,4.0,{2:-2.0,3:2.0})
+        equation2 = Equation(4,4.0,{1:-2.0,3:2.0})
+        self.assertTrue(equation2.substituteEquation(equation1))   
 
 class Equation(object):
     
@@ -74,5 +85,38 @@ class Equation(object):
             self.rhsDict[key] /= -coeffValue        
         
         self.bValue = self.bValue/-coeffValue
+        return True
+    
+    def substituteEquation(self,subEquation):
+        if subEquation is None:
+            return False
+        
+        replaceNonBasic = subEquation.basicVar
+        
+        if replaceNonBasic not in self.rhsDict:
+            return True
+        
+        replaceNonBasicCoeff = self.rhsDict[replaceNonBasic]
+        del self.rhsDict[replaceNonBasic]
+        
+        if  replaceNonBasicCoeff == float(0):
+            return True
+        
+        subEquation.bValue *= replaceNonBasicCoeff
+        self.bValue += subEquation.bValue
+
+        newRhsDict ={}
+        
+        for key in subEquation.rhsDict.keys():
+           newRhsDict[key] = subEquation.rhsDict[key] *replaceNonBasicCoeff
+                
+        for key in self.rhsDict.keys():
+            if key in newRhsDict:
+                newRhsDict[key] += self.rhsDict[key]
+            else:
+                newRhsDict[key] = self.rhsDict[key]
+        
+        self.rhsDict = newRhsDict
         
         return True
+
