@@ -48,6 +48,11 @@ class EquationTestCase(unittest.TestCase):
         equation1 = Equation(1,4.0,{2:-2.0,3:2.0})
         equation2 = Equation(4,4.0,{1:-2.0,3:2.0})
         self.assertTrue(equation2.substituteEquation(equation1))   
+        self.assertEquals(equation2.basicVar,4)
+        self.assertEquals(equation2.bValue,-4.0)
+        self.assertEquals(equation2.rhsDict[2],4.0)
+        self.assertEquals(equation2.rhsDict[3],-2.0)
+        self.assertEquals(len(equation2.rhsDict.keys()),2)   
 
 class Equation(object):
     
