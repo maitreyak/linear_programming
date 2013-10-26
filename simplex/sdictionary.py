@@ -40,9 +40,20 @@ class DictionaryTestCase(unittest.TestCase):
         self.assertEquals(len(self.sdict.getEnteringVars()),2) 
         self.assertEquals(self.sdict.getBlandsRuleVar(),2)
             
-    #def test_getLeavingVar(self):
-    #    self.sdict
-
+    def test_getLeavingVar(self):
+        self.assertEquals(self.sdict.getBlandsRuleVar(),4)
+        self.assertEquals(self.sdict.getLeavingVar(self.sdict.getBlandsRuleVar()),6)
+    
+    def test_getLeavingVarUnbounded(self):
+        basicEquations = []
+        basicEquations.append(Equation(1,4.0,{3:2.0,4:3.0,2:1.0,7:1.0}))
+        basicEquations.append(Equation(5,5.0,{3:0.0,4:3.0,2:-1.0,7:-2.0}))
+        basicEquations.append(Equation(6,5.0,{3:0.0,4:1.0,2:1.0,7:3.0}))
+        objective= Equation(0,10.0,{3:-1.0,4:1.0,2:-1.0,7:0.0})
+        sdict = Dictionary(basicEquations,objective)
+        self.assertIsNone(sdict.getLeavingVar(sdict.getBlandsRuleVar()))
+        self.assertTrue(sdict.unbounded)
+    
 
 class Dictionary(object):
     
@@ -79,6 +90,34 @@ class Dictionary(object):
         return min(entryVars)
 
     def getLeavingVar(self,enteringKey):
-        return None     
+        
+        valueDict = {}
+        for equation in self.basicEquations:
+           
+            value = equation.valueOfEntry(enteringKey)
+            
+            if value >= float(0):
+               valueDict[equation.basicVar] = value    
+         
+        if len(valueDict.keys()) == 0:
+            #dictionay is unbounded
+            self.unbounded = True
+            return None
+        
+        return min(valueDict.items(), key=lambda x: x[1])[0]
+    
+    def pivotDictionary(self,enteringVar,leavingVar):
+        
+        if self.unbounded == True or self.final == True:
+            return False
+        
+
+
+
+
+
+
+
+
 
 
