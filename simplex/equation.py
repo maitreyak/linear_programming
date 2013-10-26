@@ -69,3 +69,23 @@ class Equation(object):
         
         return True
 
+    def equals(equation1,equation2):
+        if (equation1.basicVar !=  equation2.basicVar) or (equation1.bValue != equation2.bValue):
+            return False
+
+        for key in equation1.rhsDict.keys():
+            
+            if equation1.rhsDict[key] == float(0):
+                if key in equation2.rhsDict and equation2.rhsDict[key] != float(0):
+                    return False
+                else:
+                    continue    
+
+            if key not in equation2.rhsDict:
+                return False
+            if equation1.rhsDict[key] != equation2.rhsDict[key]:
+                return False
+           
+        return True
+
+
