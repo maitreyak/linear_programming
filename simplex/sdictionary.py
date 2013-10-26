@@ -57,8 +57,8 @@ class DictionaryTestCase(unittest.TestCase):
     def test_pivotDictionary(self):
         enter = self.sdict.getBlandsRuleVar()
         exit = self.sdict.getLeavingVar(enter)
-        self.assertTrue(self.sdict.pivotDictionary(exit))
-        self.assertEquals(self.sdict.objective.bValue,13.0)
+        self.assertTrue(self.sdict.pivotDictionary(enter,exit))
+        self.assertTrue(Equation.equals(self.sdict.objective,Equation(0,10.0,{3:-1.0,6:-1.0,7:3.0})))
             
 
 class Dictionary(object):
@@ -112,7 +112,7 @@ class Dictionary(object):
         
         return min(valueDict.items(), key=lambda x: x[1])[0]
     
-    def pivotDictionary(self,leavingVar):
+    def pivotDictionary(self,enterVar,leavingVar):
             
         if self.unbounded == True or self.final == True:
             return False
@@ -130,7 +130,7 @@ class Dictionary(object):
         if equation is None:
             return False
         
-        leavingEquation.exitVarRebalance(leavingVar)
+        leavingEquation.exitVarRebalance(enterVar)
 
         for equation in self.basicEquations:
             if equation.basicVar != leavingEquation.basicVar:

@@ -36,7 +36,11 @@ class EquationTestCase(unittest.TestCase):
         self.assertEquals(equation.rhsDict[1],-0.5)
         self.assertEquals(equation.rhsDict[3],1.0)
         self.assertFalse(equation.exitVarRebalance(2))
-
+        
+        equation = Equation(4,0.0,{3:0.0,6:-1.0,2:1.0,7:3.0}) 
+        equation.exitVarRebalance(6)
+        self.assertTrue(Equation.equals(equation,Equation(6,0.0,{3:0.0,4:-1.0,2:1.0,7:3.0})))
+        
     def test_substituteEquationNone(self):
         self.assertFalse(self.equation.substituteEquation(None))
     
