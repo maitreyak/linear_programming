@@ -1,5 +1,4 @@
-#This script to build and load the dictionary from the dic files.
-
+#This file invokes and prints expected results related to assigment 1
 import sys
 import file_to_dict_script as script
 from equation import Equation
