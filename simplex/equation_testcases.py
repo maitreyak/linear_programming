@@ -18,8 +18,9 @@ class EquationTestCase(unittest.TestCase):
         self.assertIsNone(self.equation.valueOfEntry(9))
          
     def test_valueOfEntryZeroCoeff(self):
-        self.equation.rhsDict[10] = 0.0
-        self.assertIsNone(self.equation.valueOfEntry(10))
+        eq = Equation(6,0.0,{2:-1.0,4:0.0,5:-2.0,7:0.0})
+
+        self.assertIsNone(eq.valueOfEntry(4))
      
     def test_exitVarRebalanceInvalidIndex(self):
         self.assertFalse(self.equation.exitVarRebalance(103))
