@@ -51,9 +51,8 @@ class Equation(object):
         if  replaceNonBasicCoeff == float(0):
             return True
         
-        subEquation.bValue *= replaceNonBasicCoeff
-        self.bValue += subEquation.bValue
-
+        newBValue= subEquation.bValue * replaceNonBasicCoeff
+        self.bValue += newBValue
         newRhsDict ={}
         
         for key in subEquation.rhsDict.keys():
