@@ -42,8 +42,14 @@ class DictionaryTestCase(unittest.TestCase):
         self.assertEquals(self.sdict.getBlandsRuleVar(),2)
             
     def test_getLeavingVar(self):
-        self.assertEquals(self.sdict.getBlandsRuleVar(),4)
-        self.assertEquals(self.sdict.getLeavingVar(self.sdict.getBlandsRuleVar()),6)
+        basicEquations = []
+        basicEquations.append(Equation(1,1.0,{2:0.0,4:0.0,5:-1.0,7:-2.0}))
+        basicEquations.append(Equation(3,3.0,{2:1.0,4:-1.0,5:0.0,7:-1.0}))
+        basicEquations.append(Equation(6,0.0,{2:-1.0,4:0.0,5:-2.0,7:0.0}))
+        objective= Equation(0,1.0,{2:-1.0,4:2.0,5:3.0,7:1.0})
+        sdict = Dictionary(basicEquations,objective)
+
+        self.assertEquals(sdict.getLeavingVar(4),3)
     
     def test_getLeavingVarUnbounded(self):
         basicEquations = []
@@ -56,8 +62,26 @@ class DictionaryTestCase(unittest.TestCase):
         self.assertTrue(sdict.unbounded)
 
     def test_pivotDictionary(self):
-        enter = self.sdict.getBlandsRuleVar()
-        exit = self.sdict.getLeavingVar(enter)
-        self.assertTrue(self.sdict.pivotDictionary(enter,exit))
-        self.assertTrue(Equation.equals(self.sdict.objective,Equation(0,10.0,{3:-1.0,6:-1.0,7:3.0})))
+       # 3 4
+       # 1 3 6
+       # 2 4 5 7
+       # 1 3 0
+       # 0 0 -1 -2
+       # 1 -1 0 -1
+       # -1 0 -2 0
+       # 1 -1  2 3 1
+        basicEquations = []
+        basicEquations.append(Equation(1,1.0,{2:0.0,4:0.0,5:-1.0,7:-2.0}))
+        basicEquations.append(Equation(3,3.0,{2:1.0,4:-1.0,5:0.0,7:-1.0}))
+        basicEquations.append(Equation(6,0.0,{2:-1.0,4:0.0,5:-2.0,7:0.0}))
+        objective= Equation(0,1.0,{2:-1.0,4:2.0,5:3.0,7:1.0})
+        sdict = Dictionary(basicEquations,objective)
+        
+        enter = sdict.getBlandsRuleVar()
+        exit = sdict.getLeavingVar(enter)
+        self.assertEquals(enter,4)
+        self.assertEquals(exit,3)
+        self.assertTrue(sdict.pivotDictionary(enter,exit))
+        self.assertEquals(sdict.objective.bValue,7.0)
+        
 
