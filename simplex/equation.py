@@ -87,4 +87,7 @@ class Equation(object):
            
         return True
 
+    def copy(self):
+        copy = Equation(self.basicVar,self.bValue,self.rhsDict)
+        return copy 
 

@@ -9,6 +9,17 @@ class EquationTestCase(unittest.TestCase):
     def test_equation(self):
         self.assertIsNotNone(self.equation)
     
+    def test_copy(self):
+        copyEquation= self.equation.copy()
+        self.assertNotEquals(self.equation,copyEquation)
+    
+    def test_copyIntensive(self):
+        copyEquation= self.equation.copy()
+        self.assertEquals(self.equation.basicVar,copyEquation.basicVar)
+        self.assertEquals(self.equation.bValue,copyEquation.bValue)
+        self.assertEquals(self.equation.rhsDict,copyEquation.rhsDict)
+        self.assertNotEquals(id(self.equation.rhsDict),id(copyEquation.rhsDict))
+    
     def test_valueOfEntry(self):
         equation = Equation(1,4.0,{2:-2.0,3:2.0})
         self.assertEquals(equation.valueOfEntry(2),2.0)
