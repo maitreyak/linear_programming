@@ -29,9 +29,8 @@ class InitializationDictionary(Dictionary):
         
         if valueDict is None:
             return None
-        if key in valueDict.keys():
-            if key == int(-1):
-                return -1
+        if -1 in valueDict:
+            return -1
 
         return min(valueDict.items(), key=lambda x: x[1])[0]
 
