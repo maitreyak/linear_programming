@@ -14,8 +14,14 @@ class DictionaryTestCase(unittest.TestCase):
        self.sdict = Dictionary(self.basicEquations,self.objective)
        self.initDict = InitializationDictionary(self.sdict)
 
+
+
     def test_initDictionary(self):
-        self.assertIsNotNone(InitializationDictionary(self.sdict))
+        self.assertIsNotNone(self.initDict)
+        self.assertTrue(self.equalEquation(self.initDict.basicEquations,Equation(1,1.0,{5:-1.0,7:-2.0,-1:1.0})))
+        self.assertTrue(self.equalEquation(self.initDict.basicEquations,Equation(3,3.0,{2:1.0,4:-1.0,7:-1.0,-1:1.0})))
+        self.assertTrue(self.equalEquation(self.initDict.basicEquations,Equation(6,0.0,{2:-1.0,5:-2.0,-1:1.0})))
+        self.assertTrue(self.initDict.objective.equals(Equation(0,0.0,{-1:-1.0})))
         
     def test_forceEnteringVar(self):
         self.assertEquals(self.initDict.forceEnteringVar(),-1)
@@ -25,4 +31,12 @@ class DictionaryTestCase(unittest.TestCase):
 
     def test_forcePivot(self):
         self.assertTrue(self.initDict.forcePivot())
+
+
+    #Helper test method
+    def equalEquation(self,equations,equation):
+        for eq in equations:
+            if equation.basicVar == eq.basicVar:
+                return eq.equals(equation)        
+
 

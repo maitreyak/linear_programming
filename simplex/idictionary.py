@@ -11,7 +11,7 @@ class InitializationDictionary(Dictionary):
             auxEq = eq.copy()
             auxEq.rhsDict[-1]=1.0
             self.basicEquations.append(auxEq)    
-        self.objective= Equation(0,0.0,{-1:1.0})
+        self.objective= Equation(0,0.0,{-1:-1.0})
     
     def forceLevaingVar(self):
         leavingEquation= min(self.basicEquations,key=lambda x: x.bValue)
@@ -21,7 +21,7 @@ class InitializationDictionary(Dictionary):
         return -1
 
     def forcePivot(self):
-        return self.pivotDictionary(self.forceEnteringVar,self.forceLevaingVar)
+        return self.pivotDictionary(self.forceEnteringVar(),self.forceLevaingVar())
     
     #special leaving var
     def getLeavingVar(self,enteringKey):
