@@ -12,9 +12,30 @@ class InitializationDictionary(Dictionary):
             auxEq.rhsDict[-1]=1.0
             self.basicEquations.append(auxEq)    
         self.objective= Equation(0,0.0,{-1:1.0})
+    
+    def forceLevaingVar(self):
         leavingEquation= min(self.basicEquations,key=lambda x: x.bValue)
-        self.pivotDictionary(-1,leavingEquation.basicVar)        
-            
+        return leavingEquation.basicVar
+
+    def forceEnteringVar(self):
+        return -1
+
+    def forcePivot(self):
+        return self.pivotDictionary(self.forceEnteringVar,self.forceLevaingVar)
+    
+    #special leaving var
+    def getLeavingVar(self,enteringKey):
+        valueDict = self.allLeavingVars(enteringKey)
+        
+        if valueDict is None:
+            return None
+        if key in valueDict.keys():
+            if key == int(-1):
+                return -1
+
+        return min(valueDict.items(), key=lambda x: x[1])[0]
+
+         
     
         
 

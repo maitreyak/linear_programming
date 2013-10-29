@@ -34,7 +34,7 @@ class Dictionary(object):
         #apply blands rule
         return min(entryVars)
 
-    def getLeavingVar(self,enteringKey):
+    def allLeavingVars(self,enteringKey):
         
         valueDict = {}
         for equation in self.basicEquations:
@@ -49,6 +49,13 @@ class Dictionary(object):
             self.unbounded = True
             return None
         
+        return valueDict
+
+    def getLeavingVar(self,enteringKey):
+        valueDict = self.allLeavingVars(enteringKey)
+        if valueDict is None:
+            return None 
+
         return min(valueDict.items(), key=lambda x: x[1])[0]
     
     def pivotDictionary(self,enterVar,leavingVar):
