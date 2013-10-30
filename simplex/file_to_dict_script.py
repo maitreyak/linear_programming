@@ -51,3 +51,11 @@ def buildDictionaryFromFile(fileLocation):
     
     return sdict
 
+def printDictionary(sdict):
+    for eq in sdict.basicEquations:
+        print eq.basicVar,"=",eq.bValue," ",eq.rhsDict
+    print "Objective:"
+    print sdict.objective.basicVar,"=",sdict.objective.bValue," ",sdict.objective.rhsDict
+    print "--------------------"
+
+

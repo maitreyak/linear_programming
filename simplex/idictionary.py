@@ -23,18 +23,4 @@ class InitializationDictionary(Dictionary):
     def forcePivot(self):
         return self.pivotDictionary(self.forceEnteringVar(),self.forceLevaingVar())
     
-    #special leaving var
-    def getLeavingVar(self,enteringKey):
-        valueDict = self.allLeavingVars(enteringKey)
-        
-        if valueDict is None:
-            return None
-        if -1 in valueDict:
-            return -1
-
-        return min(valueDict.items(), key=lambda x: x[1])[0]
-
-         
-    
-        
 
