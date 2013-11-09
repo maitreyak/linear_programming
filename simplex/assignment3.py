@@ -11,9 +11,7 @@ def initPivotToFinal(sdict):
         print sdict.objective.bValue
     
     
-#    printDictionary(sdict) 
     sdict.forcePivot()
- #   printDictionary(sdict)
 
     while sdict.final != True:
         entry = sdict.getBlandsRuleVar()
@@ -29,7 +27,6 @@ def initPivotToFinal(sdict):
             return
 
         sdict.pivotDictionary(entry,leaving)
-  #      printDictionary(sdict)
     return
 
 
