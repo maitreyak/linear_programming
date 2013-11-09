@@ -1,8 +1,0 @@
-The model file (.model files) for the IPL have been coded in AMPL syntax. 
-To execute install glpk pagckage. 
-
-Ubuntu: sudo apt-get install glpk
-Mac: sudo port install glpk
-
-To run use command: 
-glpsol --math file.model
