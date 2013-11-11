@@ -102,7 +102,16 @@ class DictionaryTestCase(unittest.TestCase):
                 self.assertTrue(eq.equals(Equation(8,0.2,{2:0.4,4:0.0,5:0.6,7:0.0})))
             if(eq.basicVar == 9):
                 self.assertTrue(eq.equals(Equation(9,0.4,{2:0.1,4:0.9,5:0.0,7:0.0})))
-   
+
+    def test_getDualDictionary(self):
+        dual = self.sdict.getDualDictionary()
+        self.assertEquals(len(dual.basicEquations),4)
+        self.assertTrue(dual.objective.equals(Equation(0,-10.0,{1:-4.0,5:-5.0,6:0.0})))
+
+        for eq in dual.basicEquations:
+            if eq.basicVar == 7:
+                self.assertTrue(eq.equals(Equation(7,0.0,{1:-1.0,5:2.0,6:-3.0})))
+
 
                 
 

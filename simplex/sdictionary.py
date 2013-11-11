@@ -114,5 +114,38 @@ class Dictionary(object):
                 
         for newEq in cuttingPlains:
             self.basicEquations.append(newEq)
+
+    def getDualDictionary(self):
+        newEquations = []
         
+        newObjective = Equation(0,-self.objective.bValue,{})
+        
+        for key in self.objective.rhsDict:
+            
+            if(self.objective.rhsDict[key] != float(0)):
+                newBvalue= -self.objective.rhsDict[key]
+            else:
+                newBvalue= 0.0
+                
+            newEquations.append(Equation(int(key),newBvalue,{}))
+        
+        for eq in self.basicEquations:
+            for newEq in newEquations:
+                if newEq.basicVar in eq.rhsDict:
+                    if eq.rhsDict[newEq.basicVar] != float(0):
+                        newEq.rhsDict[eq.basicVar] = -eq.rhsDict[newEq.basicVar]        
+                    else:
+                        newEq.rhsDict[eq.basicVar] = 0.0
+            
+            if(eq.bValue != float(0)):
+                newObjective.rhsDict[eq.basicVar] = -eq.bValue
+            else:
+                newObjective.rhsDict[eq.basicVar] = 0.0
+
+        dualDict = Dictionary(newEquations,newObjective)
+        return dualDict
+          
+            
+        
+         
         
