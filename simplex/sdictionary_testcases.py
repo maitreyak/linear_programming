@@ -83,5 +83,26 @@ class DictionaryTestCase(unittest.TestCase):
         self.assertEquals(exit,3)
         self.assertTrue(sdict.pivotDictionary(enter,exit))
         self.assertEquals(sdict.objective.bValue,7.0)
+
+    def test_maxOfVariableIndexys(self):
+        self.assertEquals(self.sdict.maxOfVariableIndex(),7)
+
+    def test_addCuttingPLanes(self):
+        basicEquations = []
+        basicEquations.append(Equation(1,1.2,{2:0.4,4:0.0,5:-1.4,7:-2.0}))
+        basicEquations.append(Equation(3,3.4,{2:1.1,4:-1.1,5:0.0,7:-1.0}))
+        basicEquations.append(Equation(6,0.0,{2:-1.0,4:0.0,5:-2.0,7:0.0}))
+        objective= Equation(0,1.0,{2:-1.0,4:2.0,5:3.0,7:1.0})
+        sdict = Dictionary(basicEquations,objective)
+        sdict.addCuttingPlanes()
+        self.assertEquals(len(sdict.basicEquations),5)
         
+        for eq in sdict.basicEquations:
+            if(eq.basicVar == 8):
+                self.assertTrue(eq.equals(Equation(8,0.2,{2:0.4,4:0.0,5:0.6,7:0.0})))
+            if(eq.basicVar == 9):
+                self.assertTrue(eq.equals(Equation(9,0.4,{2:0.1,4:0.9,5:0.0,7:0.0})))
+   
+
+                
 

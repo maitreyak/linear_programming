@@ -1,4 +1,5 @@
 from equation import Equation
+import math
 
 class Dictionary(object):
     
@@ -7,6 +8,7 @@ class Dictionary(object):
         self.objective = objective
         self.final = False
         self.unbounded = False
+        self.allInterger = False
     
     def getEnteringVars(self):
         #Just look for positve coeffs
@@ -85,4 +87,32 @@ class Dictionary(object):
         self.objective.substituteEquation(leavingEquation)
         
         return True
+
+    def maxOfVariableIndex(self):
+        eq = max(self.basicEquations, key=lambda x: x.basicVar)
+        obj = max(self.objective.rhsDict.keys())
+        if (int(eq.basicVar) > int(obj)): 
+            return (int(eq.basicVar)) 
+        else:
+            return (int(obj))
+    
+    
+    def addCuttingPlanes(self):
+        self.allInterger = True
+        cuttingPlains = []
+        count = 1
+        for equation in self.basicEquations:
+            diff = float(str(equation.bValue - float(math.floor(equation.bValue)))) 
+            if (diff != float(0)):
+                self.allInterger = False
+                newEquation = Equation(self.maxOfVariableIndex()+count,diff,{})
+                count +=1
+                for key in equation.rhsDict:
+                    newEquation.rhsDict[key] = float(str(equation.rhsDict[key] - float(math.floor(equation.rhsDict[key]))))     
+                    
+                cuttingPlains.append(newEquation)
+                
+        for newEq in cuttingPlains:
+            self.basicEquations.append(newEq)
+        
         
